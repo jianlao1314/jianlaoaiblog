@@ -26,14 +26,14 @@ CloudFlare是一个非常优秀的CDN服务，但是CloudFlare也有一个大的
 
 ### 优化后示例站点
 
-::btn[点击体验]{link="https://cf.vvhan.com/"}
+::btn[点击体验]{link="https://cf.5334427.xyz/"}
 
 ## 实现逻辑及局部代码
 
 ### 获取优选IP
 
 ```js
-const res = await fetch("https://api.vvhan.com/tool/cf_ip");
+const res = await fetch("https://api.5334427.xyz/tool/cf_ip");
 const data = await res.json();
 // 数据格式
 // {

@@ -7,7 +7,7 @@ type: "about"
 ---
 
 :::note{type="success"}
-我是韩小韩，一位对技术充满热情、涉猎广泛的探索者，同时也是一名热衷于探索前沿技术的实践者。
+我是建佬AI，一位对技术充满热情、涉猎广泛的探索者，同时也是一名热衷于探索前沿技术的实践者。
 
 我始终保持对新技术的热情，并将我的知识与经验分享在我的博客中。
 
@@ -66,10 +66,10 @@ type: "about"
 
 |     主&emsp;页      |       <https://www.4ce.cn>        |
 | :-----------------: | :-------------------------------: |
-|   **博&emsp;客**    |    **<https://www.vvhan.com>**    |
-|  **Web&emsp;API**   |    **<https://api.vvhan.com>**    |
-|  **Han Analytics**  | **<https://analytics.vvhan.com>** |
-| **Cloudflare 优选** |    **<https://cf.vvhan.com>**     |
+|   **博&emsp;客**    |    **<https://ai.5334427.xyz>**    |
+|  **Web&emsp;API**   |    **<https://api.5334427.xyz>**    |
+|  **Han Analytics**  | **<https://analytics.5334427.xyz>** |
+| **Cloudflare 优选** |    **<https://cf.5334427.xyz>**     |
 
 ## 联系我
 

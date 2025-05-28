@@ -23,7 +23,7 @@ Han-Analytics 是一个简单的网络分析跟踪器和仪表板，托管在被
 
 ![HanAnalytics](https://i0.wp.com/uxiaohan.github.io/v2/2024/09/1726993735.webp)
 
-::btn[点击体验]{link="https://analytics.vvhan.com/"}
+::btn[点击体验]{link="https://analytics.5334427.xyz/"}
 
 ### 项目地址
 
@@ -52,7 +52,7 @@ CLOUDFLARE_API_TOKEN = 你的 Cloudflare API token
 # 网站访问密码 (不设置即无需密码访问)
 CLOUDFLARE_WEBSITE_PWD = 
 
-# 可统计的白名单 格式：  域名,WebSite|域名,WebSite，多个站点使用|分隔 例如：api.vvhan.com,Hello-Han-Api|www.vvhan.com,Hello-HanHexoBlog  (不设置即允许任何统计)
+# 可统计的白名单 格式：  域名,WebSite|域名,WebSite，多个站点使用|分隔 例如：api.5334427.xyz,Hello-Han-Api|ai.5334427.xyz,Hello-HanHexoBlog  (不设置即允许任何统计)
 CLOUDFLARE_WEBSITE_WHITELIST = 
 ```
 
