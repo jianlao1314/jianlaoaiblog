@@ -1,0 +1,198 @@
+---
+import Verification from '../Verification/Verification.astro';
+
+// 从 Astro.props 中获取 needVerification 属性
+const { needVerification = false } = Astro.props;
+---
+
+<div class="article-content-wrapper">
+  <!-- 完整内容对搜索引擎可见 -->
+  <div class="full-content" id="fullContent">
+    <slot />
+  </div>
+  
+  <!-- 用户可见的预览内容 -->
+  <div class="preview-content" id="previewContent">
+    <slot />
+  </div>
+  
+  {needVerification && (
+    <div class="read-more-container">
+      <button class="read-more-btn" id="readMoreBtn" data-read-more-btn>
+        创作不易，完成人机检测，阅读全文
+      </button>
+    </div>
+  )}
+</div>
+
+<!-- 只在需要验证时加载 Verification 组件 -->
+{needVerification && <Verification client:load />}
+
+<style>
+  .article-content-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .full-content {
+    display: block;
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .preview-content {
+    overflow: hidden;
+    position: relative;
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  .preview-content::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(transparent, var(--vh-white-color));
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .preview-content.expanded {
+    max-height: none !important;
+  }
+
+  .preview-content.expanded::after {
+    opacity: 0;
+  }
+
+  .read-more-container {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    z-index: 2;
+  }
+
+  .read-more-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--vh-main-color);
+    color: var(--vh-white-color);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+  }
+
+  .read-more-btn:hover {
+    background-color: var(--vh-main-color-88);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 768px) {
+    .read-more-btn {
+      width: 90%;
+      max-width: 320px;
+    }
+  }
+</style>
+
+<script is:inline>
+  function initArticleContent() {
+    const previewContent = document.getElementById('previewContent');
+    const readMoreBtn = document.getElementById('readMoreBtn');
+    const fullContent = document.getElementById('fullContent');
+    const readMoreContainer = document.querySelector('.read-more-container');
+
+    // 如果不需要验证，直接显示全部内容
+    if (!readMoreContainer) {
+      if (previewContent) {
+        previewContent.style.maxHeight = 'none';
+        previewContent.classList.add('expanded');
+      }
+      return;
+    }
+
+    if (!previewContent || !readMoreBtn || !fullContent || !readMoreContainer) {
+      console.error('文章内容组件初始化失败: 缺少必要元素');
+      return;
+    }
+
+    // 检查内容高度
+    function checkContentHeight() {
+      const fullHeight = fullContent.scrollHeight;
+      const previewHeight = Math.max(400, Math.floor(fullHeight * 0.6));
+
+      // 如果内容已经展开，不显示按钮
+      if (previewContent.classList.contains('expanded')) {
+        readMoreContainer.style.display = 'none';
+        return;
+      }
+
+      if (fullHeight > 400) {
+        readMoreContainer.style.display = 'block';
+        previewContent.style.maxHeight = `${previewHeight}px`;
+      } else {
+        readMoreContainer.style.display = 'none';
+        previewContent.style.maxHeight = 'none';
+      }
+    }
+
+    // 初始检查
+    checkContentHeight();
+
+    // 监听内容变化
+    const observer = new MutationObserver(checkContentHeight);
+    observer.observe(fullContent, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    // 处理按钮点击
+    readMoreBtn.addEventListener('click', (event) => {
+      if (typeof window.showVerification === 'function') {
+        window.showVerification(event);
+      } else {
+        console.error('验证功能未找到');
+      }
+    });
+
+    // 监听验证成功事件
+    window.addEventListener('verificationSuccess', () => {
+      // 移除最大高度限制
+      previewContent.style.maxHeight = 'none';
+      // 添加展开类
+      previewContent.classList.add('expanded');
+      // 隐藏按钮容器
+      readMoreContainer.style.display = 'none';
+      // 确保内容完全显示
+      setTimeout(() => {
+        const currentHeight = previewContent.scrollHeight;
+        if (currentHeight < fullContent.scrollHeight) {
+          previewContent.style.maxHeight = `${fullContent.scrollHeight}px`;
+        }
+        // 再次确保按钮被隐藏
+        readMoreContainer.style.display = 'none';
+      }, 100);
+    });
+
+    // 监听图片加载
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('load', checkContentHeight);
+    });
+  }
+
+  // 立即执行初始化
+  initArticleContent();
+
+  // 在 Astro 页面加载时也初始化
+  document.addEventListener('astro:page-load', initArticleContent);
+</script> 

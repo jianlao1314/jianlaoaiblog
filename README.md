@@ -199,6 +199,7 @@ cover: "封面图URL (为空默认随机内置封面 /public/assets/images/banne
 recommend: false # 是否推荐文章
 top: false # 是否置顶文章
 hide: false # 是否隐藏文章
+needVerification: true  # 这篇文章需要验证
 <!-- 页面独有 -->
 type: "links" # 页面类型
 comment: false # 关闭页面评论（默认开启）

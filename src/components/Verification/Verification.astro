@@ -1,0 +1,274 @@
+---
+import type { SiteConfig } from "@/config";
+import config from "@/config";
+
+const verificationCode = config.Verification.code;
+---
+
+<div class="verification-modal" id="verificationModal">
+  <div class="verification-modal-content" id="verificationModalContent">
+    <div class="verification-header">
+      <h3>人机验证</h3>
+      <button id="verificationCloseBtn" class="close-btn" aria-label="关闭">×</button>
+    </div>
+    <div class="verification-body">
+      <div class="qr-code-container">
+        <img src="https://img.5334427.xyz/v2/0nICGF6.png" alt="验证二维码" />
+        <p>请扫描二维码关注公众号回复"验证码"获取</p>
+      </div>
+      <div class="verification-input">
+        <input type="text" id="verificationInput" placeholder="请输入验证码" />
+        <button id="verificationSubmitBtn">验证</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .verification-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .verification-modal.active {
+    display: block;
+    opacity: 1;
+  }
+
+  .verification-modal-content {
+    position: fixed;
+    background-color: var(--vh-white-color);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.2s ease;
+    z-index: 1001;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 0) scale(0.95);
+  }
+
+  .verification-modal-content.visible {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  .verification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .verification-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--vh-font-color);
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--vh-font-66);
+    padding: 0.25rem;
+    line-height: 1;
+  }
+
+  .verification-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .qr-code-container {
+    text-align: center;
+  }
+
+  .qr-code-container img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 0.5rem;
+  }
+
+  .qr-code-container p {
+    color: var(--vh-font-66);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .verification-input {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .verification-input input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--vh-font-28);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .verification-input button {
+    padding: 0.5rem 1rem;
+    background-color: var(--vh-main-color);
+    color: var(--vh-white-color);
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .verification-input button:hover {
+    background-color: var(--vh-main-color-88);
+  }
+</style>
+
+<script define:vars={{ verificationCode }}>
+  let modalEl = null;
+  let modalContentEl = null;
+  let closeBtnEl = null;
+  let submitBtnEl = null;
+  let inputEl = null;
+
+  // 验证状态管理
+  const VERIFICATION_KEY = 'blog_verification_status';
+  const VERIFICATION_EXPIRY = 24 * 60 * 60 * 1000; // 24小时的毫秒数
+
+  // 检查验证状态
+  function checkVerificationStatus() {
+    try {
+      const stored = localStorage.getItem(VERIFICATION_KEY);
+      if (!stored) return false;
+
+      const { timestamp } = JSON.parse(stored);
+      const now = Date.now();
+      
+      if (now - timestamp > VERIFICATION_EXPIRY) {
+        localStorage.removeItem(VERIFICATION_KEY);
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('验证状态检查失败:', error);
+      return false;
+    }
+  }
+
+  // 保存验证状态
+  function saveVerificationStatus() {
+    try {
+      const data = {
+        timestamp: Date.now()
+      };
+      localStorage.setItem(VERIFICATION_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error('保存验证状态失败:', error);
+    }
+  }
+
+  function initVerification() {
+    modalEl = document.getElementById('verificationModal');
+    modalContentEl = document.getElementById('verificationModalContent');
+    closeBtnEl = document.getElementById('verificationCloseBtn');
+    submitBtnEl = document.getElementById('verificationSubmitBtn');
+    inputEl = document.getElementById('verificationInput');
+
+    if (!modalEl || !modalContentEl || !closeBtnEl || !submitBtnEl || !inputEl) {
+      console.error('验证组件初始化失败: 缺少必要元素');
+      return;
+    }
+
+    // 显示验证框
+    window.showVerification = function(event) {
+      if (checkVerificationStatus()) {
+        window.dispatchEvent(new CustomEvent('verificationSuccess'));
+        return;
+      }
+
+      if (!modalEl || !modalContentEl) {
+        console.error('显示验证框失败: 模态框元素未找到');
+        return;
+      }
+      
+      modalEl.style.display = 'block';
+      modalEl.style.opacity = '1';
+      
+      requestAnimationFrame(() => {
+        modalContentEl.style.opacity = '1';
+        modalContentEl.style.transform = 'translate(-50%, 0) scale(1)';
+      });
+      
+      if (inputEl) {
+        inputEl.value = '';
+        inputEl.focus();
+      }
+    };
+
+    // 关闭验证框
+    function closeModal() {
+      if (!modalEl || !modalContentEl) return;
+      
+      modalContentEl.style.opacity = '0';
+      modalContentEl.style.transform = 'translate(-50%, 0) scale(0.95)';
+      
+      setTimeout(() => {
+        modalEl.style.display = 'none';
+        modalEl.style.opacity = '0';
+      }, 200);
+    }
+
+    // 验证码检查
+    function checkVerification() {
+      if (!inputEl) return;
+      
+      const code = inputEl.value.trim();
+      
+      if (code === verificationCode) {
+        saveVerificationStatus();
+        window.dispatchEvent(new CustomEvent('verificationSuccess'));
+        closeModal();
+      } else {
+        alert('验证码错误，请重试');
+        inputEl.value = '';
+        inputEl.focus();
+      }
+    }
+
+    // 绑定事件
+    closeBtnEl.addEventListener('click', closeModal);
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl) {
+        closeModal();
+      }
+    });
+    submitBtnEl.addEventListener('click', checkVerification);
+    inputEl.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        checkVerification();
+      }
+    });
+  }
+
+  // 立即执行初始化
+  initVerification();
+
+  // 在 Astro 页面加载时也初始化
+  document.addEventListener('astro:page-load', initVerification);
+</script> 

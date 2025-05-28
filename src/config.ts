@@ -1,4 +1,114 @@
-export default {
+export interface SiteConfig {
+  // 网站标题
+  Title: string;
+  // 网站地址
+  Site: string;
+  // 网站副标题
+  Subtitle: string;
+  // 网站描述
+  Description: string;
+  // 网站作者
+  Author: string;
+  // 作者头像
+  Avatar: string;
+  // 网站座右铭
+  Motto: string;
+  // Cover 网站缩略图
+  Cover: string;
+  // 网站侧边栏公告 (不填写即不开启)
+  Tips: string;
+  // 首页打字机文案列表
+  TypeWriteList: string[];
+  // 网站创建时间
+  CreateTime: string;
+  // 顶部 Banner 配置
+  HomeBanner: {
+    enable: boolean;
+    // 首页高度
+    HomeHeight: string;
+    // 其他页面高度
+    PageHeight: string;
+    // 背景
+    background: string;
+  };
+  // 博客主题配置
+  Theme: {
+    // 颜色请用 16 进制颜色码
+    // 主题颜色
+    "--vh-main-color": string;
+    // 字体颜色
+    "--vh-font-color": string;
+    // 侧边栏宽度
+    "--vh-aside-width": string;
+    // 全局圆角
+    "--vh-main-radius": string;
+    // 主体内容宽度
+    "--vh-main-max-width": string;
+  };
+  // 导航栏 (新窗口打开 newWindow: true)
+  Navs: { text: string; link: string; icon: string }[];
+  // 侧边栏个人网站
+  WebSites: { text: string; link: string; icon: string }[];
+  // 侧边栏展示
+  AsideShow: {
+    // 是否展示个人网站
+    WebSitesShow: boolean;
+    // 是否展示分类
+    CategoriesShow: boolean;
+    // 是否展示标签
+    TagsShow: boolean;
+    // 是否展示推荐文章
+    recommendArticleShow: boolean;
+  };
+  // DNS预解析地址
+  DNSOptimization: string[];
+  // 博客音乐组件解析接口
+  vhMusicApi: string;
+  // 评论组件（只允许同时开启一个）
+  Comment: {
+    // Twikoo 评论
+    Twikoo: {
+      enable: boolean;
+      envId: string;
+    };
+    // Waline 评论
+    Waline: {
+      enable: boolean;
+      serverURL: string;
+    };
+  };
+  // Han Analytics 统计（https://github.com/uxiaohan/HanAnalytics）
+  HanAnalytics: { enable: boolean; server: string; siteId: string };
+  // Google 广告
+  GoogleAds: {
+    ad_Client: string; //ca-pub-xxxxxx
+    // 侧边栏广告(不填不开启)
+    asideAD_Slot: string;
+    // 文章页广告(不填不开启)
+    articleAD_Slot: string;
+  };
+  // 文章内赞赏码
+  Reward: {
+    // 支付宝收款码
+    AliPay: string;
+    // 微信收款码
+    WeChat: string;
+  };
+  // 访问网页 自动推送到搜索引擎
+  SeoPush: {
+    enable: boolean;
+    serverApi: string;
+    paramsName: string;
+  };
+  // 页面阻尼滚动速度
+  ScrollSpeed: number;
+  // 验证码配置
+  Verification: {
+    code: string;
+  };
+}
+
+const config = {
   // 网站标题
   Title: '建佬AI博客',
   // 网站地址
@@ -128,5 +238,12 @@ export default {
     paramsName: 'url'
   },
   // 页面阻尼滚动速度
-  ScrollSpeed: 666
-}
+  ScrollSpeed: 666,
+  // 验证码配置
+  Verification: {
+    // 优先使用环境变量中的验证码，如果没有则使用默认值
+    code: import.meta.env.PUBLIC_VERIFICATION_CODE || "3368"
+  },
+} as const;
+
+export default config;
