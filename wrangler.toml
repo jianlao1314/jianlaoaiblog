@@ -18,4 +18,19 @@ upload.format = "service-worker"
 
 # 环境变量
 [vars]
-ENVIRONMENT = "production" 
+ENVIRONMENT = "production"
+
+# 允许的域名列表
+[triggers]
+crons = []
+
+# 允许的域名列表
+[env.production]
+allowed_hosts = [
+  "data.zz.baidu.com",
+  "www.bing.com",
+  "zhanzhang.so.com",
+  "zhanzhang.sogou.com",
+  "zhanzhang.sm.cn",
+  "zhanzhang.toutiao.com"
+] 
