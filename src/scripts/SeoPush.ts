@@ -49,18 +49,6 @@ const searchEngines: SearchEngine[] = [
     api: 'https://zhanzhang.sogou.com/index.php/ziyuan/ajax/submit',
     paramName: 'url',
     method: 'POST'
-  },
-  {
-    name: '神马',
-    api: 'https://zhanzhang.sm.cn/sm/submit',
-    paramName: 'url',
-    method: 'POST'
-  },
-  {
-    name: '头条搜索',
-    api: 'https://zhanzhang.toutiao.com/api/push',
-    paramName: 'url',
-    method: 'POST'
   }
 ];
 

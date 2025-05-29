@@ -122,20 +122,6 @@ export interface SiteConfig {
         enable: boolean;
         token: string;  // 搜狗token
       };
-      // 神马搜索推送配置
-      sm: {
-        enable: boolean;
-        token: string;  // 神马token
-      };
-      // 头条搜索推送配置
-      toutiao: {
-        enable: boolean;
-        token: string;  // 头条token
-      };
-      // Yandex推送配置
-      yandex: {
-        enable: boolean;
-      };
     };
   };
   // 页面阻尼滚动速度
@@ -296,21 +282,7 @@ const config = {
       sogou: {
         enable: false,
         token: 'YOUR_SOGOU_TOKEN'  // 搜狗token
-      },
-      // 神马搜索推送配置
-      sm: {
-        enable: false,
-        token: 'YOUR_SM_TOKEN'  // 神马token
-      },
-      // 头条搜索推送配置
-      toutiao: {
-        enable: false,
-        token: 'YOUR_TOUTIAO_TOKEN'  // 头条token
-      },
-      // Yandex推送配置
-      yandex: {
-        enable: false,
-      },
+      }
     },
   },
   // 页面阻尼滚动速度

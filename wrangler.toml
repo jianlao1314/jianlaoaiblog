@@ -33,4 +33,10 @@ allowed_hosts = [
   "zhanzhang.sogou.com",
   "zhanzhang.sm.cn",
   "zhanzhang.toutiao.com"
-] 
+]
+
+# 静态资源路由规则，百度验证文件
+[site]
+bucket = "./dist"
+include = ["baidu_verify_codeva-dtSSAdbQl8.html"]
+exclude = [] 
