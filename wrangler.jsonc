@@ -1,6 +1,6 @@
 {
-  "name": "vh-astro",
-  "compatibility_date": "2025-03-31",
+  "name": "jianlaoai-astro",
+  "compatibility_date": "2025-05-29",
   "assets": {
     "directory": "./dist"
   }
