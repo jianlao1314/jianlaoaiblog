@@ -8,7 +8,6 @@ kv_namespaces = [
 
 # 路由配置
 routes = [
-  { pattern = "ai.5334427.xyz/baidu_verify_codeva-dtSSAdbQl8.html", zone_name = "5334427.xyz" },
   { pattern = "ai.5334427.xyz/*", zone_name = "5334427.xyz" }
 ]
 
@@ -35,9 +34,3 @@ allowed_hosts = [
   "zhanzhang.sm.cn",
   "zhanzhang.toutiao.com"
 ]
-
-# 静态资源路由规则，百度验证文件
-[site]
-bucket = "./dist"
-include = ["baidu_verify_codeva-dtSSAdbQl8.html"]
-exclude = [] 
