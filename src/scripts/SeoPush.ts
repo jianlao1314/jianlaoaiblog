@@ -92,10 +92,44 @@ const pushToSearchEngine = async (engine: SearchEngine, url: string) => {
   }
 };
 
+// 检查URL是否已经推送过
+const checkUrlPushed = async (url: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`/api/check-url?url=${encodeURIComponent(url)}`);
+    const data = await response.json();
+    return data.pushed;
+  } catch (error) {
+    console.error('Failed to check URL status:', error);
+    return false;
+  }
+};
+
+// 标记URL为已推送
+const markUrlAsPushed = async (url: string) => {
+  try {
+    await fetch('/api/mark-url', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url }),
+    });
+  } catch (error) {
+    console.error('Failed to mark URL as pushed:', error);
+  }
+};
+
 export default async () => {
   if (!SITE_INFO.SeoPush.enable) return;
   
   const currentUrl = window.location.href.replace(/\/$/, '');
+  
+  // 检查URL是否已经推送过
+  const isPushed = await checkUrlPushed(currentUrl);
+  if (isPushed) {
+    console.log('URL already pushed, skipping...');
+    return;
+  }
   
   // 并行推送到所有启用的搜索引擎
   const pushPromises = searchEngines.map(engine => 
@@ -103,4 +137,7 @@ export default async () => {
   );
   
   await Promise.all(pushPromises);
+  
+  // 标记URL为已推送
+  await markUrlAsPushed(currentUrl);
 }

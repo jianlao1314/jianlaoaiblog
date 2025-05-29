@@ -1,0 +1,21 @@
+name = "jianlaoaiblog"
+compatibility_date = "2025-05-29"
+
+# KV 命名空间配置
+kv_namespaces = [
+  { binding = "PUSHED_URLS", id = "4377291bd7ff4b14b1ce6c57ca27a233" }
+]
+
+# 路由配置
+routes = [
+  { pattern = "ai.5334427.xyz/*", zone_name = "5334427.xyz" }
+]
+
+# 构建配置
+[build]
+command = "npm run build"
+upload.format = "service-worker"
+
+# 环境变量
+[vars]
+ENVIRONMENT = "production" 
