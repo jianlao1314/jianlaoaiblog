@@ -17,7 +17,7 @@ import swup from '@swup/astro';
 // https://astro.build/config
 export default defineConfig({
 	site: SITE_INFO.Site,
-	build: { assets: 'vh_static' },
+	build: { assets: 'vh_static',format: 'file' },
 	integrations: [swup({
 		theme: false,
 		animationClass: "vh-animation-",
@@ -45,5 +45,5 @@ export default defineConfig({
 	},
 	vite: { resolve: { alias: { "@": path.resolve(__dirname, "./src") } } },
 	server: { host: '0.0.0.0' },
-	cleanURLs: false
+	trailingSlash: 'never'
 });
