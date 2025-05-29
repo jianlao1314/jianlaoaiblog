@@ -97,8 +97,46 @@ export interface SiteConfig {
   // 访问网页 自动推送到搜索引擎
   SeoPush: {
     enable: boolean;
-    serverApi: string;
-    paramsName: string;
+    // 搜索引擎配置
+    engines: {
+      // 百度推送配置
+      baidu: {
+        enable: boolean;
+        token?: string;  // 百度推送token
+      };
+      // Google推送配置
+      google: {
+        enable: boolean;
+      };
+      // Bing推送配置
+      bing: {
+        enable: boolean;
+      };
+      // 360搜索推送配置
+      so360: {
+        enable: boolean;
+        token: string;  // 360搜索token
+      };
+      // 搜狗推送配置
+      sogou: {
+        enable: boolean;
+        token: string;  // 搜狗token
+      };
+      // 神马搜索推送配置
+      sm: {
+        enable: boolean;
+        token: string;  // 神马token
+      };
+      // 头条搜索推送配置
+      toutiao: {
+        enable: boolean;
+        token: string;  // 头条token
+      };
+      // Yandex推送配置
+      yandex: {
+        enable: boolean;
+      };
+    };
   };
   // 页面阻尼滚动速度
   ScrollSpeed: number;
@@ -233,9 +271,47 @@ const config = {
   },
   // 访问网页 自动推送到搜索引擎
   SeoPush: {
-    enable: false,
-    serverApi: '',
-    paramsName: 'url'
+    enable: true,
+    // 搜索引擎配置
+    engines: {
+      // 百度推送配置
+      baidu: {
+        enable: true,
+        token: 'your-baidu-token'
+      },
+      // Google推送配置
+      google: {
+        enable: true,
+      },
+      // Bing推送配置
+      bing: {
+        enable: true,
+      },
+      // 360搜索推送配置
+      so360: {
+        enable: false,
+        token: 'YOUR_360_TOKEN'  // 360搜索token
+      },
+      // 搜狗推送配置
+      sogou: {
+        enable: false,
+        token: 'YOUR_SOGOU_TOKEN'  // 搜狗token
+      },
+      // 神马搜索推送配置
+      sm: {
+        enable: false,
+        token: 'YOUR_SM_TOKEN'  // 神马token
+      },
+      // 头条搜索推送配置
+      toutiao: {
+        enable: false,
+        token: 'YOUR_TOUTIAO_TOKEN'  // 头条token
+      },
+      // Yandex推送配置
+      yandex: {
+        enable: false,
+      },
+    },
   },
   // 页面阻尼滚动速度
   ScrollSpeed: 666,
