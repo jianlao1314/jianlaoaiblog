@@ -45,5 +45,5 @@ export default defineConfig({
 	},
 	vite: { resolve: { alias: { "@": path.resolve(__dirname, "./src") } } },
 	server: { host: '0.0.0.0' },
-	trailingSlash: 'ignore',
+	cleanURLs: false
 });
