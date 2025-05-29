@@ -8,6 +8,7 @@ kv_namespaces = [
 
 # 路由配置
 routes = [
+  { pattern = "ai.5334427.xyz/baidu_verify_codeva-dtSSAdbQl8.html", zone_name = "5334427.xyz" },
   { pattern = "ai.5334427.xyz/*", zone_name = "5334427.xyz" }
 ]
 
