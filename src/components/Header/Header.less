@@ -99,8 +99,10 @@ header.vh-header {
             display: none;
             position: absolute;
             top: 100%;
-            left: 0;
-            min-width: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 180px;
+            max-width: 280px;
             background: var(--vh-white-color);
             border-radius: var(--vh-main-radius);
             box-shadow: var(--vh-box-shadow);
@@ -121,6 +123,9 @@ header.vh-header {
               text-decoration: none;
               border-radius: 0.38rem;
               transition: all 0.18s ease-in-out;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
 
               &:hover {
                 background-color: var(--vh-main-color-66);
@@ -132,6 +137,7 @@ header.vh-header {
               }
 
               i {
+                flex-shrink: 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
