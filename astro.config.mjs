@@ -44,6 +44,5 @@ export default defineConfig({
 		shikiConfig: { theme: 'github-light' },
 	},
 	vite: { resolve: { alias: { "@": path.resolve(__dirname, "./src") } } },
-	server: { host: '0.0.0.0' },
-	trailingSlash: 'ignore',
+	server: { host: '0.0.0.0' }
 });
