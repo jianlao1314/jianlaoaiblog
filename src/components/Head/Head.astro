@@ -14,6 +14,8 @@ const WebSiteData = { "@context": "https://schema.org", "@type": "WebSite", name
 const ArticleData = { "@context": "https://schema.org", "@type": "BlogPosting", headline: WebTitle, image: [WebCover], author: { "@type": "Person", name: Author, url: Site }, publisher: { "@type": "Organization", name: SiteName, logo: { "@type": "ImageObject", url: SiteCover } } };
 // 基础 样式
 import "@/styles/Base.less";
+// 百度站点验证
+const baiduMeta = '<meta name="baidu-site-verification" content="codeva-dtSSAdbQl8" />';
 ---
 
 <head>
@@ -33,7 +35,7 @@ import "@/styles/Base.less";
 	<meta name="robots" content="index, follow, max-image-preview:large" />
 	<meta itemprop="image" content={WebCover} />
 	<!-- 百度站点验证 -->
-	<meta name="baidu-site-verification" content="codeva-dtSSAdbQl8" />
+	<Fragment set:html={baiduMeta} />
 	<!-- Open Graph -->
 	<meta property="article:author" content={Author} />
 	<meta property="og:type" content={PageCover ? "article" : "website"} />
