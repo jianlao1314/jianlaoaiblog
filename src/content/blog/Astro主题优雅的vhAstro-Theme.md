@@ -222,7 +222,8 @@ id: 文章ID
 date: 文章创建日期
 updated: 文章更新日期
 cover: "封面图URL (为空默认随机内置封面 /public/assets/images/banner)"
-recommend: false # 是否推荐文章
+recommend: true # 是否推荐文章
+needVerification: true
 top: false # 是否置顶文章
 hide: false # 是否隐藏文章
 <!-- 页面独有 -->

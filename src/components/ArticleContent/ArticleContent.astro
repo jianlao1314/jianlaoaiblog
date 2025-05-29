@@ -1,5 +1,5 @@
 ---
-import Verification from '../Verification/Verification.astro';
+import Verification from '@/components/Verification/Verification.astro';
 
 // 从 Astro.props 中获取 needVerification 属性
 const { needVerification = false } = Astro.props;
@@ -26,7 +26,7 @@ const { needVerification = false } = Astro.props;
 </div>
 
 <!-- 只在需要验证时加载 Verification 组件 -->
-{needVerification && <Verification client:load />}
+{needVerification && <Verification />}
 
 <style>
   .article-content-wrapper {
