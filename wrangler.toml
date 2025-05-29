@@ -36,6 +36,13 @@ allowed_hosts = [
   "zhanzhang.toutiao.com"
 ]
 
+# 路由规则
+[rules]
+[[rules.rewrite]]
+pattern = "ai.5334427.xyz/baidu_verify_codeva-dtSSAdbQl8.html"
+to = "/baidu_verify_codeva-dtSSAdbQl8.html"
+status = 200
+
 # 静态资源路由规则，百度验证文件
 [site]
 bucket = "./dist"
