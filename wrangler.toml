@@ -14,7 +14,7 @@ routes = [
 # 构建配置
 [build]
 command = "npm run build"
-upload.format = "modules"
+upload.format = "service-worker"
 
 # 环境变量
 [vars]
