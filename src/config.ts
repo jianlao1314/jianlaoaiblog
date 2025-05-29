@@ -263,15 +263,15 @@ const config = {
       // 百度推送配置
       baidu: {
         enable: true,
-        token: 'your-baidu-token'
+        token: 'r8yEgZ0WpYoP70Av'
       },
       // Google推送配置
       google: {
-        enable: true,
+        enable: false,
       },
       // Bing推送配置
       bing: {
-        enable: true,
+        enable: false,
       },
       // 360搜索推送配置
       so360: {
