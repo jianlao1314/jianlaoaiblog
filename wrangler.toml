@@ -48,3 +48,7 @@ status = 200
 bucket = "./dist"
 include = ["baidu_verify_codeva-dtSSAdbQl8.html"]
 exclude = [] 
+
+[assets]
+directory = "./dist"
+html_handling = "none"
