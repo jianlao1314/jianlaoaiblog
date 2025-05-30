@@ -2,7 +2,7 @@
 import SITE_CONFIG from "@/config";
 // 当前页面的 URL 元地址
 const canonicalData = new URL(Astro.url.pathname, Astro.site);
-const canonicalURL = canonicalData.href.replace(/\/+$/, "");
+const canonicalURL = canonicalData.href.replace(/\/+$/, "").replace(/\.html$/, "");
 // 页面内容的元数据
 const { Title, Keywords, Description, PageCover } = Astro.props;
 const { Site, Title: SiteName, Subtitle, Author, Cover, DNSOptimization } = SITE_CONFIG;
