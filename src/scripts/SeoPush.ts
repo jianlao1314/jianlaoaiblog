@@ -67,13 +67,9 @@ const searchEngines: SearchEngine[] = [
 // 检查 URL 是否已经推送过
 async function checkUrlPushed(url: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/check-url?url=${encodeURIComponent(url)}`);
-    if (!response.ok) {
-      console.warn('Failed to check URL status, assuming not pushed');
-      return false;
-    }
-    const data = await response.json();
-    return data.pushed;
+    const pushedUrls = localStorage.getItem('pushed_urls');
+    const urls = pushedUrls ? JSON.parse(pushedUrls) : [];
+    return urls.includes(url);
   } catch (error) {
     console.error('Error checking URL:', error);
     return false;
@@ -83,18 +79,15 @@ async function checkUrlPushed(url: string): Promise<boolean> {
 // 标记 URL 为已推送
 async function markUrlAsPushed(url: string): Promise<void> {
   try {
-    const response = await fetch('/api/mark-url', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url })
-    });
+    const pushedUrls = localStorage.getItem('pushed_urls');
+    const urls = pushedUrls ? JSON.parse(pushedUrls) : [];
     
-    if (!response.ok) {
-      throw new Error(`Failed to mark URL as pushed: ${response.statusText}`);
+    if (!urls.includes(url)) {
+      urls.push(url);
+      localStorage.setItem('pushed_urls', JSON.stringify(urls));
     }
   } catch (error) {
     console.error('Error marking URL as pushed:', error);
-    // 这里可以添加重试逻辑
   }
 }
 
@@ -137,28 +130,27 @@ export default async function SeoPush() {
   if (!SITE_INFO.SeoPush.enable) return;
 
   const currentUrl = window.location.href;
+  const url = new URL(currentUrl);
   
-  try {
-    // 检查是否已推送
-    const isPushed = await checkUrlPushed(currentUrl);
-    if (isPushed) {
-      console.log('URL already pushed:', currentUrl);
-      return;
-    }
+  // 只在文章页面且带有 push 参数时推送
+  if (!url.pathname.startsWith('/posts/') || url.searchParams.get('push') !== 'true') {
+    return;
+  }
 
+  try {
     // 获取启用的搜索引擎
     const enabledEngines = searchEngines.filter(engine => 
       SITE_INFO.SeoPush.engines[engine.name.toLowerCase()]?.enable
     );
 
+    // 使用干净的 URL（不带参数）进行推送
+    const cleanUrl = url.origin + url.pathname;
+
     // 并行推送
     const pushPromises = enabledEngines.map(engine => 
-      pushToSearchEngine(currentUrl, engine)
+      pushToSearchEngine(cleanUrl, engine)
     );
     await Promise.all(pushPromises);
-
-    // 标记为已推送
-    await markUrlAsPushed(currentUrl);
   } catch (error) {
     console.error('SEO push failed:', error);
   }
