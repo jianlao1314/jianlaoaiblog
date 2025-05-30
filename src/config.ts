@@ -132,6 +132,18 @@ export interface SiteConfig {
   };
 }
 
+interface EngineConfig {
+  enable: boolean;
+  token?: string;
+}
+
+interface SeoPushConfig {
+  enable: boolean;
+  engines: {
+    [key: string]: EngineConfig;
+  };
+}
+
 const config = {
   // 网站标题
   Title: '建佬AI博客',

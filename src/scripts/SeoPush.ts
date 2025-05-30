@@ -10,6 +10,18 @@ interface SearchEngine {
   transformUrl?: (url: string) => string;
 }
 
+interface EngineConfig {
+  enable: boolean;
+  token?: string;
+}
+
+interface SeoPushConfig {
+  enable: boolean;
+  engines: {
+    [key: string]: EngineConfig;
+  };
+}
+
 // 定义 KV 存储接口
 interface KVNamespace {
   get(key: string): Promise<string | null>;
@@ -52,94 +64,102 @@ const searchEngines: SearchEngine[] = [
   }
 ];
 
-// 推送URL到搜索引擎
-const pushToSearchEngine = async (engine: SearchEngine, url: string) => {
+// 检查 URL 是否已经推送过
+async function checkUrlPushed(url: string): Promise<boolean> {
   try {
-    // 如果搜索引擎配置了URL转换函数，先转换URL
-    const finalUrl = engine.transformUrl ? engine.transformUrl(url) : url;
-    
-    const params = { [engine.paramName]: finalUrl };
-    const method = engine.method || 'POST';
-    
-    // 使用 Cloudflare Workers 环境变量中的 token
-    const engineConfig = SITE_INFO.SeoPush.engines[engine.name.toLowerCase() as keyof typeof SITE_INFO.SeoPush.engines];
-    const token = 'token' in engineConfig ? engineConfig.token : undefined;
-    const headers = {
-      'Content-Type': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (compatible; JianlaoAIBlog/1.0; +https://ai.5334427.xyz)',
-      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-      ...engine.headers
-    };
-
-    // 在 Workers 环境中发送请求
-    const response = await fetch(engine.api, {
-      method,
-      headers,
-      body: method === 'GET' ? undefined : JSON.stringify(params)
-    });
-
+    const response = await fetch(`/api/check-url?url=${encodeURIComponent(url)}`);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      console.warn('Failed to check URL status, assuming not pushed');
+      return false;
     }
-    
-    const result = await response.text();
-    console.log(`Successfully pushed to ${engine.name}:`, result);
+    const data = await response.json();
+    return data.pushed;
   } catch (error) {
-    console.error(`Failed to push to ${engine.name}:`, error);
-  }
-};
-
-// 检查URL是否已经推送过
-const checkUrlPushed = async (url: string): Promise<boolean> => {
-  try {
-    // 使用 Cloudflare KV 存储检查
-    const pushedUrls = await window.PUSHED_URLS.get('pushed_urls');
-    const urls = pushedUrls ? JSON.parse(pushedUrls) : [];
-    return urls.includes(url);
-  } catch (error) {
-    console.error('Failed to check URL status:', error);
+    console.error('Error checking URL:', error);
     return false;
   }
-};
+}
 
-// 标记URL为已推送
-const markUrlAsPushed = async (url: string) => {
+// 标记 URL 为已推送
+async function markUrlAsPushed(url: string): Promise<void> {
   try {
-    // 使用 Cloudflare KV 存储记录
-    const pushedUrls = await window.PUSHED_URLS.get('pushed_urls');
-    const urls = pushedUrls ? JSON.parse(pushedUrls) : [];
+    const response = await fetch('/api/mark-url', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
     
-    if (!urls.includes(url)) {
-      urls.push(url);
-      await window.PUSHED_URLS.put('pushed_urls', JSON.stringify(urls));
+    if (!response.ok) {
+      throw new Error(`Failed to mark URL as pushed: ${response.statusText}`);
     }
   } catch (error) {
-    console.error('Failed to mark URL as pushed:', error);
+    console.error('Error marking URL as pushed:', error);
+    // 这里可以添加重试逻辑
   }
-};
+}
 
-export default async () => {
-  if (!SITE_INFO.SeoPush.enable) return;
-  
-  const currentUrl = window.location.href.replace(/\/$/, '');
-  
-  // 检查URL是否已经推送过
-  const isPushed = await checkUrlPushed(currentUrl);
-  if (isPushed) {
-    console.log('URL already pushed, skipping...');
-    return;
+// 推送 URL 到搜索引擎
+async function pushToSearchEngine(url: string, engine: SearchEngine): Promise<void> {
+  const maxRetries = 3;
+  let retryCount = 0;
+
+  while (retryCount < maxRetries) {
+    try {
+      const response = await fetch(engine.api, {
+        method: engine.method || 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...engine.headers
+        },
+        body: JSON.stringify({ [engine.paramName]: url })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      console.log(`Successfully pushed to ${engine.name}`);
+      return;
+    } catch (error) {
+      retryCount++;
+      if (retryCount === maxRetries) {
+        console.error(`Failed to push to ${engine.name} after ${maxRetries} attempts:`, error);
+        throw error;
+      }
+      // 指数退避重试
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000));
+    }
   }
+}
+
+// 主函数
+export default async function SeoPush() {
+  if (!SITE_INFO.SeoPush.enable) return;
+
+  const currentUrl = window.location.href;
   
-  // 并行推送到所有启用的搜索引擎
-  const pushPromises = searchEngines
-    .filter(engine => {
-      const engineConfig = SITE_INFO.SeoPush.engines[engine.name.toLowerCase() as keyof typeof SITE_INFO.SeoPush.engines];
-      return engineConfig?.enable;
-    })
-    .map(engine => pushToSearchEngine(engine, currentUrl));
-  
-  await Promise.all(pushPromises);
-  
-  // 标记URL为已推送
-  await markUrlAsPushed(currentUrl);
+  try {
+    // 检查是否已推送
+    const isPushed = await checkUrlPushed(currentUrl);
+    if (isPushed) {
+      console.log('URL already pushed:', currentUrl);
+      return;
+    }
+
+    // 获取启用的搜索引擎
+    const enabledEngines = searchEngines.filter(engine => 
+      SITE_INFO.SeoPush.engines[engine.name.toLowerCase()]?.enable
+    );
+
+    // 并行推送
+    const pushPromises = enabledEngines.map(engine => 
+      pushToSearchEngine(currentUrl, engine)
+    );
+    await Promise.all(pushPromises);
+
+    // 标记为已推送
+    await markUrlAsPushed(currentUrl);
+  } catch (error) {
+    console.error('SEO push failed:', error);
+  }
 }
