@@ -1,10 +1,9 @@
 ---
 title: 【开源】Web Watermark 图片添加水印在线小助手
-categories: Daily
+categories: 项目分享
 tags:
   - 开源
   - 水印
-  - WebWatermark
 
 id: Web-Watermark
 cover: "https://i0.wp.com/uxiaohan.github.io/v2/2025/02/1739241633608.webp"

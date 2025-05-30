@@ -1,11 +1,8 @@
 ---
 title: 【开源】骤雨重山无限存储图床托管于（Cloudflare Pages）
 date: 2024-07-22 18:11:06
-categories: Code
+categories: 项目分享
 tags:
-  - Cloudflare Pages
-  - telegraph
-  - Imgur
   - 免费图床
 
 id: "zycs-img-cloud-from-cloudflare-pages"

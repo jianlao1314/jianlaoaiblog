@@ -1,12 +1,8 @@
 ---
 title: 【开源】HanAnalytics访问分析Web统计托管于（Cloudflare Pages）
 date: 2024-09-22 20:20:13
-categories: Code
+categories: 项目分享
 tags:
-  - HanAnalytics
-  - Cloudflare Pages
-  - umami
-  - Analytics Engine
   - 网站分析
 
 id: "han-analytics"

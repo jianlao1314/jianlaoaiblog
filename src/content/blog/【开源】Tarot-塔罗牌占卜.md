@@ -1,11 +1,9 @@
 ---
 title: 【开源】Tarot-塔罗牌占卜
-categories: Code
+categories: 项目分享
 tags:
   - 开源
-  - Tarot
   - 塔罗牌占卜
-  - Tarot-Web
 id: kaiyuan-tarot
 cover: https://i0.wp.com/uxiaohan.github.io/v2/2024/12/1733449691.png
 date: 2024-12-06 09:37:11
