@@ -1,5 +1,5 @@
 ---
-title: "Adobe Photoshop 2025 v26.7.0.15 破解版免费下载"
+title: "Adobe Photoshop 2025 v26.7.0.15 for windows破解版免费下载"
 categories: 破解软件
 tags: 
 - Photoshop破解版
