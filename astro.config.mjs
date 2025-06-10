@@ -17,7 +17,14 @@ import swup from '@swup/astro';
 // https://astro.build/config
 export default defineConfig({
 	site: SITE_INFO.Site,
-	build: { assets: 'vh_static',format: 'file' },
+	build: { 
+		assets: 'vh_static',
+		format: 'file',
+		// 确保输出文件为 UTF-8 格式
+		inlineStylesheets: 'auto',
+		// 设置默认编码
+		encoding: 'utf-8'
+	},
 	integrations: [swup({
 		theme: false,
 		animationClass: "vh-animation-",
