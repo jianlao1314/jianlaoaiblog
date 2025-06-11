@@ -27,3 +27,6 @@ crons = []
 # 允许的域名列表
 [env.production]
 allowed_hosts = [*]
+
+[observability.logs]
+enabled = false
