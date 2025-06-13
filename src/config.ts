@@ -150,11 +150,11 @@ const config = {
   // 网站地址
   Site: 'https://ai.5334427.xyz',
   // 网站副标题
-  Subtitle: '不曾与你分享的时间,我在用AI赚钱.',
+  Subtitle: '学习AI，使用AI，分享AI.',
   // 网站描述
   Description: '建佬AI 专注于AI与相关技术的实战分享，涵盖AI、Java、Python、架构、全栈等，并涉及学习资源、游戏资源、破解软件等领域。同时，博客也分享作者的生活、音乐和旅行的热爱。',
   // 网站作者
-  Author: '建佬AI',
+  Author: '建佬',
   // 作者头像
   Avatar: 'https://img.5334427.xyz/v2/9g5tIu4.jpeg',
   // 网站座右铭
@@ -166,7 +166,15 @@ const config = {
   // 首页打字机文案列表
   TypeWriteList: [
     '不曾与你分享的时间,我在用AI赚钱.',
-    "I am making money with AI in the time I haven't shared with you.",
+    "学习AI，理解未来；使用AI，创造价值。",
+    "让AI为你打工，而不是你为AI打工。",
+    "别羡慕别人靠AI赚钱，你也可以开始行动。",
+    "代码改变世界，AI改变生活。",
+    "用AI赋能自己，不做信息时代的局外人。",
+    "抓住AI的风口，普通人也能逆风翻盘。",
+    "不分享AI，就像发现金矿却埋起来。",
+    "从学习AI开始，走上自动赚钱之路。",
+    "不是AI太难，是你还没开始。",
   ],
   // 网站创建时间
   CreateTime: '2025-05-27',

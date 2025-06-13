@@ -19,7 +19,7 @@ const { needVerification = false } = Astro.props;
   {needVerification && (
     <div class="read-more-container">
       <button class="read-more-btn" id="readMoreBtn" data-read-more-btn>
-        创作不易，完成人机检测，阅读全文
+        预防爬虫，完成人机检测，阅读全文
       </button>
     </div>
   )}
@@ -128,7 +128,7 @@ const { needVerification = false } = Astro.props;
     // 检查内容高度
     function checkContentHeight() {
       const fullHeight = fullContent.scrollHeight;
-      const previewHeight = Math.max(400, Math.floor(fullHeight * 0.6));
+      const previewHeight = Math.max(400, Math.floor(fullHeight * 0.8));
 
       // 如果内容已经展开，不显示按钮
       if (previewContent.classList.contains('expanded')) {
